@@ -977,14 +977,14 @@ footer strong, footer a { color: #e50914 !important; }
 
   <script>
     const TIERS = [
-      { cp: 2320, gs: 1000, php: 985 },
-      { cp: 1080, gs: 500,  php: 490 },
-      { cp: 648,  gs: 300,  php: 294 },
-      { cp: 416,  gs: 200,  php: 196 },
-      { cp: 208,  gs: 100,  php: 98 },
-      { cp: 100,  gs: 50,   php: 49 },
-      { cp: 40,   gs: 20,   php: 21 },
-      { cp: 20,   gs: 10,   php: 11 }
+      { cp: 2320, gs: 1000, php: 940 },
+      { cp: 1080, gs: 500,  php: 470 },
+      { cp: 648,  gs: 300,  php: 282 },
+      { cp: 416,  gs: 200,  php: 188 },
+      { cp: 208,  gs: 100,  php: 94 },
+      { cp: 100,  gs: 50,   php: 47 },
+      { cp: 40,   gs: 20,   php: 18.8 },
+      { cp: 20,   gs: 10,   php: 9.4 }
     ];
 
     const DEFAULT_DB = {
@@ -1529,7 +1529,7 @@ footer strong, footer a { color: #e50914 !important; }
       let gsBase = 0, phpBase = 0, initialCounts = {};
       let reducedCP = targetCP;
       while(reducedCP > 2500) {
-        gsBase += 1000; phpBase += 975; reducedCP -= 2320;
+        gsBase += 1000; phpBase += 940; reducedCP -= 2320;
         initialCounts[1000] = (initialCounts[1000] || 0) + 1;
       }
       let maxSearch = reducedCP + 2320;
