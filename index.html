@@ -904,13 +904,13 @@ footer strong, footer a { color: #e50914 !important; }
           <div class="step-left">
             <div class="step-badge" style="background:#fff; color:#0f172a;">4</div>
             <div>
-              <p class="step-title" style="color:#fff;">Order Now!</p>
-              <p class="step-sub" style="color:rgba(255,255,255,0.9);">Choose the cost option, then send your order note.</p>
+              <p class="step-title" style="color:#fff;">Proceed to CREDX</p>
+              <p class="step-sub" style="color:rgba(255,255,255,0.9);">Choose the cost option, copy the GS breakdown, then continue to CREDX.</p>
             </div>
           </div>
         </div>
 
-        <p>Select which result you want to use for ordering:</p>
+        <p>Select which result you want to use for your top-up:</p>
 
         <div class="choice-row">
           <label class="choice">
@@ -930,7 +930,7 @@ footer strong, footer a { color: #e50914 !important; }
           </label>
         </div>
 
-        <button class="btn btn-cta" onclick="orderNow()">ORDER NOW!</button>
+        <button class="btn btn-cta" onclick="orderNow()">COPY BREAKDOWN &amp; GO TO CREDX</button>
       </div>
 
       <div class="footer-note">
@@ -1645,78 +1645,52 @@ footer strong, footer a { color: #e50914 !important; }
     }
 
     function orderNow() {
-      const template = document.getElementById('userSelector')?.value || "";
-      const selectedDraws = getSelectedDrawsText();
-
       const choice = document.querySelector('input[name="costChoice"]:checked')?.value || "optimized";
       const altVisible = !document.getElementById('altCard')?.classList.contains('hidden');
-
       const finalChoice = (choice === "alternative" && !altVisible) ? "optimized" : choice;
 
-      
-      const totalCPText = document.getElementById('resCP')?.innerText || "0 CP";
-      const currentCP = parseInt(document.getElementById('currentCP')?.value) || 0;
-      const remainingCPMatch = totalCPText.match(/\d+/g);
-      const remainingCP = remainingCPMatch ? remainingCPMatch.join('') : "0";
-    
+      const breakdownEl = finalChoice === "alternative"
+        ? document.getElementById("altBreakdown")
+        : document.getElementById("gsBreakdown");
 
-      let lineTitle = "";
-      let lineCost = "";
-      let bdText = "";
-
-      if (finalChoice === "alternative") {
-        const gs = document.getElementById('altGS')?.innerText || "0 GS";
-        const php = document.getElementById('altPHP')?.innerText || "0.00";
-        lineTitle = "Alternative (Rounded)";
-        lineCost = `${gs} | ₱${php}`;
-        bdText = document.getElementById('altBreakdown')?.innerText || "";
-      } else {
-        const gs = document.getElementById('resGS')?.innerText || "0 GS";
-        const php = document.getElementById('resPHP')?.innerText || "0.00";
-        lineTitle = "Optimized Cost";
-        lineCost = `${gs} | ₱${php}`;
-        bdText = document.getElementById('gsBreakdown')?.innerText || "";
-      }
-
-      if (!template) {
-        alert("Please select a draw template first.");
+      if (!breakdownEl) {
+        alert("Please run the calculator first.");
         return;
       }
 
-      const msg =
-`Hi Ryzen! I want to order CODM CP.
+      // Copy only the GS breakdown, without the "Breakdown:" label.
+      const breakdown = breakdownEl.innerText
+        .replace(/^Breakdown:\s*/i, "")
+        .trim();
 
-✅ Draw: ${template}
-✅ Selected Draws: ${selectedDraws}
-✅ Total Required CP: ${remainingCP} CP
-${currentCP > 0 ? `✅ Current CP Used: ${currentCP.toLocaleString()} CP` : ""}
-✅ Using: ${lineTitle}
-✅ Cost: ${lineCost}
-
-${bdText ? bdText : ""}
-
-(Please confirm availability & ETA. Thank you!)`;
+      if (!breakdown || breakdown === "—" || breakdown === "Breakdown here.") {
+        alert("Please run the calculator first.");
+        return;
+      }
 
       const proceed = confirm(
-        "You're about to open Messenger.\n\nWe will copy your order note so you can paste it into the chat.\n\nContinue?"
+        "Your GS breakdown will be copied to your clipboard.\n\nAfter that, you will be redirected to CREDX to complete your CODM CP top-up.\n\nContinue?"
       );
       if (!proceed) return;
 
-      const openMessenger = () => window.open("https://m.me/ryzendiscountedgamecredits", "_blank");
+      const credxUrl = "https://credx.ph/codm-cp-top-up-ph";
+      const goToCredx = () => {
+        window.location.href = credxUrl;
+      };
 
       if (navigator.clipboard?.writeText) {
-        navigator.clipboard.writeText(msg).then(() => {
-          openMessenger();
-          alert("✅ Order note copied!\nGo ahead and PASTE the order note in Messenger to place your order.");
-        }).catch(() => {
-          openMessenger();
-          prompt("Copy this message and paste it in Messenger:", msg);
-          alert("✅ After copying, paste the order note in Messenger to place your order.");
-        });
+        navigator.clipboard.writeText(breakdown)
+          .then(() => {
+            alert("✅ Breakdown copied!\n\nYou will now be redirected to CREDX.");
+            goToCredx();
+          })
+          .catch(() => {
+            prompt("Copy this GS breakdown, then continue to CREDX:", breakdown);
+            goToCredx();
+          });
       } else {
-        openMessenger();
-        prompt("Copy this message and paste it in Messenger:", msg);
-        alert("✅ After copying, paste the order note in Messenger to place your order.");
+        prompt("Copy this GS breakdown, then continue to CREDX:", breakdown);
+        goToCredx();
       }
     }
 
