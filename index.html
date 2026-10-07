@@ -1626,11 +1626,13 @@ footer strong, footer a { color: #e50914 !important; }
       return { gs: finalGS, php: finalPHP, counts: finalCounts };
     }
 
-    function getAltCombo(targetCP) {
-      if (targetCP <= 0) return { gs: 0, php: 0, counts: {} };
-      let raw = targetCP / 2320;
-      let rounded = Math.ceil(raw * 10) / 10;
-      let targetGS = Math.round(rounded * 1000);
+    function getAltCombo(targetCP, optimizedGS) {
+      if (targetCP <= 0 || optimizedGS <= 0) return { gs: 0, php: 0, counts: {} };
+
+      // Alternative is based on the optimized GS result, rounded UP to the next
+      // 100 GS increment. This guarantees the alternative never falls below
+      // the optimized GS or the CP Needed requirement.
+      let targetGS = Math.ceil(optimizedGS / 100) * 100;
       let remain = targetGS, php = 0, counts = {};
       for (let t of TIERS) {
         while (remain >= t.gs) {
@@ -1673,7 +1675,7 @@ footer strong, footer a { color: #e50914 !important; }
 
       const optimized = getCheapestCombo(remainingCP);
     
-      const alternative = getAltCombo(remainingCP);
+      const alternative = getAltCombo(remainingCP, optimized.gs);
 
       const buildBD = (counts) => Object.entries(counts).sort((a,b)=>b[0]-a[0])
         .map(([gs, c]) => `<b>${c}x</b> ${gs} GS`).join(" + ");
