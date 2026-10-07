@@ -406,6 +406,59 @@
 
     .result-card { padding: 18px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.18); margin-top: 0; }
 
+    /* Results hierarchy: CP Needed is the summary; cost cards are the actual purchase options. */
+    .cp-needed-card {
+      background: linear-gradient(145deg, #151515, #0c0c0c);
+      border-color: rgba(255,255,255,0.14);
+    }
+
+    .cp-needed-card .result-title {
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+    }
+
+    .cost-result-card {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(145deg, #181818, #0d0d0d);
+      border-color: rgba(255,255,255,0.18);
+      padding-top: 20px;
+    }
+
+    .cost-result-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: #dc2626;
+    }
+
+    .alternative-result-card::before {
+      background: #f59e0b;
+    }
+
+    .cost-result-card .result-title {
+      margin-bottom: 16px;
+    }
+
+    .cost-result-card .result-title h3 {
+      font-size: 0.95rem;
+    }
+
+    .cost-result-card .stat-row {
+      padding: 7px 0;
+    }
+
+    .cost-result-card .stat-total {
+      margin-top: 8px;
+    }
+
+    .cost-result-card .breakdown {
+      margin-top: 12px;
+    }
+
     .result-title { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
     .result-title h3 {
       margin: 0;
@@ -873,25 +926,35 @@ footer strong, footer a { color: #e50914 !important; }
           </div>
         </div>
 
+        <div class="result-card cp-needed-card" style="margin-bottom:12px;">
+          <div class="result-title">
+            <h3>CP Needed</h3>
+            <span class="result-pill">Selected Draws</span>
+          </div>
+          <div class="stat-total" style="border-top:0; padding-top:0; margin-top:0;">
+            <span id="totalCPNeeded">0 CP</span>
+          </div>
+          <div class="breakdown" style="border-top:0; padding-top:0; margin-top:4px;">Total CP from the draw numbers selected in Step 3 minus your current CP.</div>
+        </div>
+
         <div class="card-row">
-          <div class="stats-box result-card">
+          <div class="stats-box result-card cost-result-card optimized-result-card">
             <div class="result-title">
               <h3>Optimized Cost</h3>
-              <span class="result-pill">Best Value</span>
-            </div>
+                          </div>
 
-            <div class="stat-row"><span>CP:</span> <span id="resCP">0 CP</span></div>
+            <div class="stat-row"><span>CP Equivalent:</span> <span id="resCP">0 CP</span></div>
             <div class="stat-row"><span>GS:</span> <span id="resGS">0 GS</span></div>
             <div class="stat-total">₱<span id="resPHP">0.00</span></div>
             <div id="gsBreakdown" class="breakdown">Selection results will appear here.</div>
           </div>
 
-          <div id="altCard" class="alt-box result-card hidden">
+          <div id="altCard" class="alt-box result-card cost-result-card alternative-result-card hidden">
             <div class="result-title">
               <h3>Alternative</h3>
-              <span class="result-pill">Rounded Best Value</span>
-            </div>
+                          </div>
 
+            <div class="stat-row"><span>CP Equivalent:</span> <span id="altCP">0 CP</span></div>
             <div class="stat-row"><span>GS:</span> <span id="altGS">0 GS</span></div>
             <div class="stat-total">₱<span id="altPHP">0.00</span></div>
             <div id="altBreakdown" class="breakdown">Breakdown here.</div>
@@ -1329,7 +1392,7 @@ footer strong, footer a { color: #e50914 !important; }
       const opt = document.querySelector('input[name="costChoice"][value="optimized"]');
       if (opt) opt.checked = true;
 
-      updateDisplay(0,0,0,"", 0,0,"", false);
+      updateDisplay(0,0,0,"", 0,0,"", 0,0,false);
       syncAltChoiceAvailability(false);
     }
 
@@ -1597,7 +1660,7 @@ footer strong, footer a { color: #e50914 !important; }
       syncSelectAll();
 
       if (totalCP === 0) {
-        updateDisplay(0,0,0,"",0,0,"", false);
+        updateDisplay(0,0,0,"",0,0,"",0,0,false);
         syncAltChoiceAvailability(false);
         return true;
       }
@@ -1615,21 +1678,36 @@ footer strong, footer a { color: #e50914 !important; }
       const buildBD = (counts) => Object.entries(counts).sort((a,b)=>b[0]-a[0])
         .map(([gs, c]) => `<b>${c}x</b> ${gs} GS`).join(" + ");
 
+      // Convert the actual GS/code combination back into its CP equivalent.
+      // Example: 4x1000 GS + 1x500 GS + 1x300 GS = 11,008 CP.
+      const getCPEquivalent = (counts) => Object.entries(counts).reduce((total, [gs, count]) => {
+        const tier = TIERS.find(t => t.gs === Number(gs));
+        return total + (tier ? tier.cp * count : 0);
+      }, 0);
+
+      const optimizedCPEquivalent = getCPEquivalent(optimized.counts);
+      const alternativeCPEquivalent = getCPEquivalent(alternative.counts);
       const showAlt = !onlyLowDraws;
 
       updateDisplay(remainingCP, optimized.gs, optimized.php, buildBD(optimized.counts),
-                    alternative.gs, alternative.php, buildBD(alternative.counts), showAlt);
+                    alternative.gs, alternative.php, buildBD(alternative.counts),
+                    optimizedCPEquivalent, alternativeCPEquivalent, showAlt);
 
       syncAltChoiceAvailability(showAlt);
       return true;
     }
 
-    function updateDisplay(cp, gs, php, bd, ags, aphp, abd, showAlt) {
-      document.getElementById('resCP').innerText = cp.toLocaleString() + ' CP Needed';
+    function updateDisplay(totalCP, gs, php, bd, ags, aphp, abd, cpEquivalent, altCPEquivalent, showAlt) {
+      // CP Needed = total CP from selected draws minus the current CP entered in Step 2.
+      document.getElementById('totalCPNeeded').innerText = totalCP.toLocaleString() + ' CP';
+
+      // Result cards show only the CP equivalent of the GS combination being offered.
+      document.getElementById('resCP').innerText = cpEquivalent.toLocaleString() + ' CP';
       document.getElementById('resGS').innerText = gs.toLocaleString() + ' GS';
       document.getElementById('resPHP').innerText = php.toLocaleString(undefined, {minimumFractionDigits: 2});
       document.getElementById('gsBreakdown').innerHTML = "<b>Breakdown:</b> " + (bd || "—");
 
+      document.getElementById('altCP').innerText = altCPEquivalent.toLocaleString() + ' CP';
       document.getElementById('altGS').innerText = ags.toLocaleString() + ' GS';
       document.getElementById('altPHP').innerText = aphp.toLocaleString(undefined, {minimumFractionDigits: 2});
       document.getElementById('altBreakdown').innerHTML = "<b>Breakdown:</b> " + (abd || "—");
