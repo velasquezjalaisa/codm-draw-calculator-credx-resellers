@@ -297,13 +297,16 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 12px;
+      margin-bottom: 0;
+      min-width: 0;
     }
 
     .step-left {
       display: flex;
       align-items: center;
       gap: 10px;
+      flex: 1 1 auto;
+      min-width: 0;
     }
 
     .step-badge {
@@ -329,10 +332,26 @@
     }
 
     .step-sub {
-      margin: 2px 0 0 0;
-      font-size: 0.8rem;
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      margin: 12px 0 18px 0;
+      padding: 10px 0 0 0;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.68rem;
+      line-height: 1.35;
       color: var(--text-light);
       font-weight: 600;
+    }
+
+    @media (max-width: 520px) {
+      .step-sub {
+        margin-top: 10px;
+        margin-bottom: 16px;
+        padding-top: 9px;
+        font-size: 0.65rem;
+        line-height: 1.3;
+      }
     }
 
     .step-actions {
@@ -836,15 +855,13 @@ footer strong, footer a { color: #e50914 !important; }
         <div class="step-head">
           <div class="step-left">
             <div class="step-badge">1</div>
-            <div>
-              <p class="step-title">Select Draw</p>
-              <p class="step-sub">Choose the lucky draw template you want to calculate.</p>
-            </div>
+            <p class="step-title">Select Draw</p>
           </div>
           <div class="step-actions">
             <span class="chip">Required</span>
           </div>
         </div>
+        <p class="step-sub">Choose the lucky draw template you want to calculate.</p>
 
         <label style="margin-top:6px;">Selected Draw:</label>
         <div class="draw-search-box">
@@ -863,21 +880,17 @@ footer strong, footer a { color: #e50914 !important; }
         </small>
       </div>
 
-      </div>
-
       <div class="step-card">
         <div class="step-head">
           <div class="step-left">
             <div class="step-badge">2</div>
-            <div>
-              <p class="step-title">Input Current CP</p>
-              <p class="step-sub">Optional: Enter how much CP you currently have. We will subtract it from the total CP needed.</p>
-            </div>
+            <p class="step-title">Input Current CP</p>
           </div>
           <div class="step-actions">
             <span class="chip">Optional</span>
           </div>
         </div>
+        <p class="step-sub">Optional: Enter how much CP you currently have. We will subtract it from the total CP needed.</p>
 
         <label style="margin-top:6px;">Current CP</label>
         <input type="number" id="currentCP" placeholder="Enter your current CP" min="0" value="0" />
@@ -887,16 +900,14 @@ footer strong, footer a { color: #e50914 !important; }
         <div class="step-head">
           <div class="step-left">
             <div class="step-badge">3</div>
-            <div>
-              <p class="step-title">Choose Draws</p>
-              <p class="step-sub">Tick the draw numbers you plan to buy.</p>
-            </div>
+            <p class="step-title">Choose Draws</p>
           </div>
           <div class="step-actions">
             <span class="chip">1–10</span>
             <span class="chip">Multiple</span>
           </div>
         </div>
+        <p class="step-sub">Tick the draw numbers you plan to buy.</p>
 
         <label class="check-item" style="margin-bottom:10px;">
           <input type="checkbox" id="selectAllDraws" />
@@ -916,15 +927,13 @@ footer strong, footer a { color: #e50914 !important; }
         <div class="step-head">
           <div class="step-left">
             <div class="step-badge">✓</div>
-            <div>
-              <p class="step-title">Results</p>
-              <p class="step-sub">Use Optimized Cost for affordable value. Alternative rounds the value to get a good price with lesser codes to redeem.</p>
-            </div>
+            <p class="step-title">Results</p>
           </div>
           <div class="step-actions">
             <button class="btn btn-reset" style="width:auto; padding:10px 14px; margin:0;" onclick="resetCalculator()">Reset</button>
           </div>
         </div>
+        <p class="step-sub">Use Optimized Cost for affordable value. Alternative rounds the value to get a good price with lesser codes to redeem.</p>
 
         <div class="result-card cp-needed-card" style="margin-bottom:12px;">
           <div class="result-title">
@@ -966,12 +975,10 @@ footer strong, footer a { color: #e50914 !important; }
         <div class="step-head" style="margin-bottom: 0;">
           <div class="step-left">
             <div class="step-badge" style="background:#fff; color:#0f172a;">4</div>
-            <div>
-              <p class="step-title" style="color:#fff;">Proceed to CREDX</p>
-              <p class="step-sub" style="color:rgba(255,255,255,0.9);">Choose the cost option, copy the GS breakdown, then continue to CREDX.</p>
-            </div>
+            <p class="step-title" style="color:#fff;">Proceed to CREDX</p>
           </div>
         </div>
+        <p class="step-sub" style="color:rgba(255,255,255,0.9); border-top-color:rgba(255,255,255,0.22);">Choose the cost option, copy the GS breakdown, then continue to CREDX.</p>
 
         <p style="margin-top:18px;">Select which result you want to use for your top-up:</p>
 
