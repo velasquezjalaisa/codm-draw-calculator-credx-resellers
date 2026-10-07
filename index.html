@@ -238,19 +238,44 @@
     .footer-note a { color: var(--teal-primary); font-weight: 700; text-decoration: none; }
     .warning-text { color: #b91c1c; font-weight: 800; display: block; margin-top: 8px; }
 
+    /* Top navigation: buttons only, no container background */
     .mode-switch {
-      background: var(--border-color);
-      padding: 4px;
-      border-radius: 10px;
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 20;
       display: flex;
-      gap: 4px;
-      margin-bottom: 20px;
-      width: 100%;
-      max-width: 500px;
-      justify-content: center;
+      gap: 6px;
+      align-items: center;
+      justify-content: flex-end;
+      width: auto;
+      max-width: none;
+      margin: 0;
+      padding: 0;
+      background: transparent !important;
     }
-    .mode-btn { padding: 6px 12px; border-radius: 6px; border: none; cursor: pointer; font-weight: 600; font-size: 0.8rem; }
-    .mode-btn.active { background: var(--teal-primary); color: white; }
+    .mode-btn {
+      padding: 5px 9px;
+      border-radius: 6px;
+      border: 0 !important;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.76rem;
+      background: transparent !important;
+      color: #aaa !important;
+      box-shadow: none !important;
+      text-transform: none;
+    }
+    .mode-btn:hover {
+      background: rgba(229,9,20,.10) !important;
+      color: #fff !important;
+      transform: none;
+    }
+    .mode-btn.active {
+      background: transparent !important;
+      color: #ff3b43 !important;
+      box-shadow: none !important;
+    }
 
     .template-item {
       display: flex; justify-content: space-between; align-items: center;
@@ -491,14 +516,88 @@
     .auth-actions { display: flex; gap: 8px; }
     .auth-actions .btn { flex: 1; }
   
+    /* ===== Step 1 Draw Search ===== */
+    .draw-search-box { position: relative; }
+    .draw-suggestions {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      right: 0;
+      background: #171717;
+      border: 1px solid #3a3a3a;
+      border-radius: 10px;
+      box-shadow: 0 14px 30px rgba(0,0,0,.45);
+      max-height: 240px;
+      overflow-y: auto;
+      z-index: 1000;
+      display: none;
+    }
+    .draw-suggestions.visible { display: block; }
+    .draw-suggestion {
+      padding: 11px 13px;
+      color: #f5f5f5;
+      font-size: .86rem;
+      font-weight: 650;
+      cursor: pointer;
+      border-bottom: 1px solid #2b2b2b;
+    }
+    .draw-suggestion:last-child { border-bottom: 0; }
+    .draw-suggestion:hover, .draw-suggestion.active {
+      background: #2a1111;
+      color: #ff5a5a;
+    }
+    .draw-confirmation {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      padding: 9px 11px;
+      border-radius: 9px;
+      background: #171717;
+      border: 1px solid #333;
+      color: #9ca3af;
+      font-size: .78rem;
+      font-weight: 700;
+    }
+    .draw-confirmation.confirmed {
+      background: #102217;
+      border-color: #285c38;
+      color: #8fe0a6;
+    }
+    .draw-confirmation.invalid {
+      background: #241010;
+      border-color: #713030;
+      color: #ff8a8a;
+    }
+    .draw-confirmation-icon {
+      display: inline-flex;
+      width: 20px; height: 20px;
+      align-items: center; justify-content: center;
+      border-radius: 50%;
+      background: #303030;
+      color: #aaa;
+      flex: 0 0 auto;
+    }
+    .confirmed .draw-confirmation-icon { background: #1f7a3d; color: #fff; }
+    .invalid .draw-confirmation-icon { background: #9b2c2c; color: #fff; }
+    .btn-confirm-draw {
+      margin-top: 9px;
+      background: #b91c1c;
+      color: #fff;
+      font-weight: 800;
+    }
+    .btn-confirm-draw:hover { background: #dc2626; }
+
     /* ===== Draw Search ===== */
     .draw-search-status {
       display: block;
-      margin-top: -8px;
+      margin-top: 12px;
       margin-bottom: 10px;
+      padding-top: 2px;
       color: var(--text-light);
       font-size: 0.72rem;
       font-weight: 600;
+      line-height: 1.5;
     }
 
     #userSelector:focus {
@@ -638,31 +737,47 @@ footer strong, footer a { color: #e50914 !important; }
   header { border-top-width: 2px !important; }
 }
 
+/* Final top navigation override */
+.mode-switch {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+.mode-switch .mode-btn {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+@media (max-width: 600px) {
+  .mode-switch { top: 10px; right: 8px; }
+  .mode-btn { padding: 4px 7px; font-size: 0.72rem; }
+  .header-wrapper { padding-top: 28px; }
+}
+
 </style>
 </head>
 
-<body data-theme="light">
+<body data-theme="dark">
 
   <div class="header-wrapper">
     <div class="brand-info">
-      <h1 class="brand-title">CODM Draw Calculator<span class="verified-badge">✔</span></h1>
-      <span class="brand-subtitle">Credits engine for credx.ph resellers.</span>
+      <h1 class="brand-title">CODM Draw Calculator</h1>
+      <span class="brand-subtitle">Credits engine for credx.ph resellers</span>
     </div>
     <a href="https://www.facebook.com/RyzenDiscountedGameCredits/">
-    <img src="Logo_Default.png" alt="Credx Logo" class="official-logo" />
+    <img src="Logo_Default.png" alt="Ryzen Logo" class="official-logo" />
     </a>
   </div>
 
   <div class="mode-switch">
     <button id="btnUser" class="mode-btn active" onclick="showPanel('user')">User</button>
     <button id="btnAdmin" class="mode-btn" onclick="showPanel('admin')">Admin 🔒</button>
-    <button id="btnTheme" class="mode-btn" onclick="toggleTheme()">🌙 Dark Mode</button>
+    
   </div>
 
   <div class="main-container">
 
     <div id="panelUser">
-
 
       <div class="step-card">
         <div class="step-head">
@@ -679,10 +794,17 @@ footer strong, footer a { color: #e50914 !important; }
         </div>
 
         <label style="margin-top:6px;">Selected Draw:</label>
-        <input type="text" id="userSelector" list="drawOptions"
-               placeholder="Type to search for a draw..."
-               autocomplete="off" aria-label="Search and select draw" />
-        <datalist id="drawOptions"></datalist>
+        <div class="draw-search-box">
+          <input type="text" id="userSelector"
+                 placeholder="Type to search for a draw..."
+                 autocomplete="off" aria-label="Search and select draw" />
+          <div id="drawSuggestions" class="draw-suggestions" role="listbox" aria-label="Draw suggestions"></div>
+        </div>
+        <div id="drawConfirmation" class="draw-confirmation" aria-live="polite">
+          <span class="draw-confirmation-icon">✓</span>
+          <span id="drawConfirmationText">No draw selected yet.</span>
+        </div>
+        <button type="button" class="btn btn-confirm-draw" onclick="confirmSelectedDraw()">Confirm Draw</button>
         <small id="drawSearchStatus" class="draw-search-status">
           Type a draw name to search the available templates.
         </small>
@@ -809,11 +931,6 @@ footer strong, footer a { color: #e50914 !important; }
         </div>
 
         <button class="btn btn-cta" onclick="orderNow()">ORDER NOW!</button>
-      </div>
-
-      <div class="footer-note">
-        Top up your CODM CP at discounted prices only at <br><b>Ryzen Discounted Game Credits!</b><br>
-        <span class="warning-text">We only have one Facebook Page. Beware of posers.</span>
       </div>
 
       <div class="footer-note">
@@ -1105,10 +1222,19 @@ footer strong, footer a { color: #e50914 !important; }
         userSelector.addEventListener('input', () => {
           updateDrawCPLabels();
           updateDrawSearchStatus();
+          updateDrawConfirmation();
+          renderDrawSuggestions(true);
         });
+        userSelector.addEventListener('focus', () => renderDrawSuggestions(true));
         userSelector.addEventListener('change', () => {
           updateDrawCPLabels();
           updateDrawSearchStatus();
+          updateDrawConfirmation();
+        });
+        document.addEventListener('click', event => {
+          const box = document.getElementById('drawSuggestions');
+          const wrap = document.querySelector('.draw-search-box');
+          if (box && wrap && !wrap.contains(event.target)) box.classList.remove('visible');
         });
       }
 
@@ -1276,23 +1402,78 @@ footer strong, footer a { color: #e50914 !important; }
         : 'No matching draw found. Select a draw from the suggestions.';
     }
 
+    function renderDrawSuggestions(forceShow = false) {
+      const input = document.getElementById('userSelector');
+      const box = document.getElementById('drawSuggestions');
+      if (!input || !box) return;
+      const query = input.value.trim().toLowerCase();
+      const names = Object.keys(db);
+      const matches = names.filter(name => !query || name.toLowerCase().includes(query));
+      box.innerHTML = '';
+      matches.slice(0, 30).forEach(name => {
+        const item = document.createElement('div');
+        item.className = 'draw-suggestion';
+        item.textContent = name;
+        item.setAttribute('role', 'option');
+        item.addEventListener('mousedown', e => {
+          e.preventDefault();
+          input.value = name;
+          box.classList.remove('visible');
+          updateDrawCPLabels();
+          updateDrawSearchStatus();
+          updateDrawConfirmation();
+        });
+        box.appendChild(item);
+      });
+      box.classList.toggle('visible', forceShow || document.activeElement === input);
+    }
+
+    function updateDrawConfirmation() {
+      const input = document.getElementById('userSelector');
+      const panel = document.getElementById('drawConfirmation');
+      const text = document.getElementById('drawConfirmationText');
+      if (!input || !panel || !text) return;
+      const name = input.value.trim();
+      panel.classList.remove('confirmed', 'invalid');
+      if (!name) {
+        text.textContent = 'No draw selected yet.';
+        return;
+      }
+      if (db[name]) {
+        panel.classList.add('confirmed');
+        text.textContent = `Selected: ${name}`;
+      } else {
+        panel.classList.add('invalid');
+        text.textContent = 'Draw name not found. Choose a suggestion.';
+      }
+    }
+
+    function confirmSelectedDraw() {
+      const input = document.getElementById('userSelector');
+      if (!input) return false;
+      const name = input.value.trim();
+      if (!name || !db[name]) {
+        updateDrawConfirmation();
+        input.focus();
+        renderDrawSuggestions(true);
+        return false;
+      }
+      updateDrawCPLabels();
+      updateDrawConfirmation();
+      const status = document.getElementById('drawSearchStatus');
+      if (status) status.textContent = '✓ Draw confirmed. You can continue to Step 2.';
+      return true;
+    }
+
     function refreshUI() {
       const sel = document.getElementById('userSelector');
-      const options = document.getElementById('drawOptions');
+      const options = document.getElementById('drawSuggestions');
       const delList = document.getElementById('adminDeleteList');
 
       if (options) options.innerHTML = '';
       if (delList) delList.innerHTML = '';
 
       const names = Object.keys(db);
-
-      if (options) {
-        names.forEach(name => {
-          const option = document.createElement('option');
-          option.value = name;
-          options.appendChild(option);
-        });
-      }
 
       if (delList) {
         names.forEach(name => {
@@ -1318,6 +1499,8 @@ footer strong, footer a { color: #e50914 !important; }
 
       updateDrawCPLabels();
       updateDrawSearchStatus();
+      renderDrawSuggestions();
+      updateDrawConfirmation();
     }
 
     async function deleteTemplate(name) {
@@ -1452,27 +1635,6 @@ footer strong, footer a { color: #e50914 !important; }
       document.getElementById('altBreakdown').innerHTML = "<b>Breakdown:</b> " + (abd || "—");
 
       document.getElementById('altCard').classList.toggle('hidden', !showAlt);
-    }
-
-    function applyTheme(theme) {
-      const normalized = theme === 'dark' ? 'dark' : 'light';
-      document.body.setAttribute('data-theme', normalized);
-      const btn = document.getElementById('btnTheme');
-      if (btn) {
-        btn.innerText = normalized === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
-      }
-      try { localStorage.setItem('codmCalculatorTheme', normalized); } catch (e) {}
-    }
-
-    function toggleTheme() {
-      const current = document.body.getAttribute('data-theme') || 'light';
-      applyTheme(current === 'dark' ? 'light' : 'dark');
-    }
-
-    function initTheme() {
-      let saved = 'light';
-      try { saved = localStorage.getItem('codmCalculatorTheme') || 'light'; } catch (e) {}
-      applyTheme(saved);
     }
 
     function getSelectedDrawsText() {
