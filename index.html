@@ -55,15 +55,67 @@
     }
 
     /* Branding Styles */
-    .header-wrapper {
+    .top-brandbar {
       width: 100%;
-      max-width: 500px;
+      max-width: 980px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 16px;
+      padding: 0 10px;
+      box-sizing: border-box;
+      margin-bottom: 18px;
+    }
+
+    .top-brandbar .mode-switch {
+      width: auto;
+      max-width: none;
+      margin: 0;
+      padding: 0;
+      justify-content: flex-end;
+      flex: 0 0 auto;
+    }
+
+    .top-brandbar .official-logo {
+      width: auto;
+      height: 54px;
+      object-fit: contain;
+      filter: drop-shadow(0 3px 8px rgba(0,0,0,0.35));
+    }
+
+    .header-banner {
+      width: 100%;
+      max-width: 980px;
+      height: 320px;
+      box-sizing: border-box;
+      margin-bottom: 18px;
+      border: 1px solid #2b2b2b;
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      background: #050505;
+      box-shadow: 0 14px 35px rgba(0,0,0,.35);
+    }
+
+    .header-banner img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+    }
+
+    .header-wrapper {
+      width: 100%;
+      max-width: 980px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       margin-bottom: 25px;
       padding: 0 10px;
+      box-sizing: border-box;
       position: relative;
+      text-align: center;
     }
 
     .brand-info {
@@ -73,7 +125,7 @@
     }
 
     .brand-title {
-      font-size: 1.4rem;
+      font-size: 2rem;
       font-weight: 800;
       display: flex;
       align-items: center;
@@ -95,7 +147,7 @@
     }
 
     .brand-subtitle {
-      font-size: 0.75rem;
+      font-size: 0.65rem;
       color: var(--text-light);
       font-weight: 600;
       text-transform: uppercase;
@@ -240,18 +292,17 @@
 
     /* Top navigation: buttons only, no container background */
     .mode-switch {
-      position: absolute;
-      top: 14px;
-      right: 14px;
+      position: relative;
       z-index: 20;
       display: flex;
       gap: 6px;
       align-items: center;
       justify-content: flex-end;
-      width: auto;
-      max-width: none;
-      margin: 0;
-      padding: 0;
+      width: 100%;
+      max-width: 980px;
+      box-sizing: border-box;
+      margin: 0 0 26px;
+      padding: 0 10px;
       background: transparent !important;
     }
     .mode-btn {
@@ -821,9 +872,14 @@ footer strong, footer a { color: #e50914 !important; }
   box-shadow: none !important;
 }
 @media (max-width: 600px) {
-  .mode-switch { top: 10px; right: 8px; }
+  .mode-switch { margin: 0; }
   .mode-btn { padding: 4px 7px; font-size: 0.72rem; }
-  .header-wrapper { padding-top: 28px; }
+  .top-brandbar { padding: 0 6px; gap: 10px; }
+  .top-brandbar .official-logo { height: 46px; }
+  .header-banner { height: 190px; border-radius: 14px; }
+  .header-wrapper { margin-bottom: 8px; }
+  .brand-title { font-size: 1.65rem; }
+  .brand-subtitle { font-size: 0.58rem; }
 }
 
 </style>
@@ -831,20 +887,26 @@ footer strong, footer a { color: #e50914 !important; }
 
 <body data-theme="dark">
 
+  <div class="top-brandbar">
+    <a href="https://www.facebook.com/RyzenDiscountedGameCredits/" aria-label="Ryzen Discounted Game Credits">
+      <img src="Logo_Default.png" alt="Ryzen Logo" class="official-logo" />
+    </a>
+
+    <div class="mode-switch">
+      <button id="btnUser" class="mode-btn active" onclick="showPanel('user')">User</button>
+      <button id="btnAdmin" class="mode-btn" onclick="showPanel('admin')">Admin 🔒</button>
+    </div>
+  </div>
+
+  <div class="header-banner" aria-label="Call of Duty Mobile banner">
+    <img src="codm-banner.png" alt="Call of Duty Mobile banner" />
+  </div>
+
   <div class="header-wrapper">
     <div class="brand-info">
       <h1 class="brand-title">CODM Draw Calculator</h1>
       <span class="brand-subtitle">Credits engine for credx.ph resellers</span>
     </div>
-    <a href="https://www.facebook.com/RyzenDiscountedGameCredits/">
-    <img src="Logo_Default.png" alt="Ryzen Logo" class="official-logo" />
-    </a>
-  </div>
-
-  <div class="mode-switch">
-    <button id="btnUser" class="mode-btn active" onclick="showPanel('user')">User</button>
-    <button id="btnAdmin" class="mode-btn" onclick="showPanel('admin')">Admin 🔒</button>
-    
   </div>
 
   <div class="main-container">
